@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>{{request.args.get("type")}} Monitor | Mysql Query Monitor</title>
+    <script type="text/javascript" src="{{url_for('static',filename='js/jquery-1.8.2.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static',filename='js/socketio-0.9.16.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static',filename='js/monitor.js')}}"></script>
+    <style>
+        br {
+            height: 0px;
+        }
+    </style>
+</head>
+<body>
+<h2>Mysql查询语句监控，当前监控类型:{{request.values.get("type")}}</h2>
+<input type="hidden" id="tail-pos" value="0">
+<div id="connect-status"></div>
+{%if request.values.get("type","").lower()=="tail"%}
+    tail行数：<input type="text" id="line-count" value="100"><br/>
+    关键字：<input type="text" id="key-text" value=""></br>
+    <input type="button" id="show-tail" value="查看"/></br>
+{%endif%}
+
+<div id="log"></div>
+<script>
+    var monitorType = "{{request.args.get('type','follow')}}";
+    $(function () {
+        new SockClient(monitorType).init().start();
+    });
+</script>
+</body>
+</html>
